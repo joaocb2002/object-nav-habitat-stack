@@ -12,17 +12,20 @@ dependencies:
   # 3) Habitat-Sim pinned to a stable release
   - habitat-sim=0.3.3
 
-  # 4) Headless build selector (enables offscreen/headless usage)
+  # 4) Numpy
+  - numpy<2
+
+  # 5) Headless build selector (enables offscreen/headless usage)
   - headless
   - withbullet
 
-  # 5) Pip inside the conda env (we’ll use it for habitat-lab)
+  # 6) Pip inside the conda env (we'll use it for habitat-lab)
   - pip
 
-  # 6) Pip packages (pinned)
+  # 7) Pip packages (pinned)
   - pip:
       # Habitat-Lab pinned to the stable PyPI release
       - habitat-lab==0.3.320250127
       # Optional but commonly used with Habitat-Lab releases
-      - habitat-baselines==0.3.320250127
+      # - habitat-baselines==0.3.320250127
 
