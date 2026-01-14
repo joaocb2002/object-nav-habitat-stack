@@ -17,3 +17,5 @@ docker run --rm -it \
   -w "$WORKDIR" \
   "$IMAGE" \
   "$@"
+
+# Note: Add 'bash' at the end of the docker run command to start an interactive shell session inside the container.

@@ -9,6 +9,7 @@ echo "=== ObjectNav Habitat Stack: bootstrap ==="
 if ! command -v docker >/dev/null 2>&1; then
   echo "❌ Docker is not installed or not in PATH."
   echo "Please install Docker Engine before continuing."
+  echo "Visit: https://docs.docker.com/get-docker/"
   exit 1
 fi
 echo "✔ Docker CLI found"
@@ -16,7 +17,8 @@ echo "✔ Docker CLI found"
 # 2) Check Docker daemon
 if ! docker info >/dev/null 2>&1; then
   echo "❌ Docker daemon is not running."
-  echo "Please start the Docker daemon and try again."
+  echo "Please start the Docker daemon with the appropriate command."
+  echo "For Linux: sudo systemctl start docker"
   exit 1
 fi
 echo "✔ Docker daemon is running"

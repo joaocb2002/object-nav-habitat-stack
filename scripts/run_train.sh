@@ -32,3 +32,5 @@ docker run --rm \
     # Uses --ipc=host for shared memory
     # No interactive terminal (-it) flag (can be added if needed)
     # Intended for training runs
+
+# Note: Add 'bash' at the end of the docker run command to start an interactive shell session inside the container.

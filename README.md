@@ -102,6 +102,44 @@ export DATA_DIR=/path/to/datasets
 
 ---
 
+## 🚀 Bootstrap (First-Time / New Machine Setup)
+
+For convenience, the repository provides a small helper script:
+
+```bash
+./scripts/bootstrap.sh
+```
+
+### 🔍 What This Script Does
+
+- ✅ Checks that Docker is installed and the daemon is running  
+- 📦 Reminds you where datasets are expected to live  
+- ⬇️ Pulls the latest `habitat-project` Docker image from GHCR  
+
+### 🕒 When to Use It
+
+- After cloning the repository on a **new machine**
+- When setting up a **new server**
+- To quickly verify that **Docker is working** before running experiments
+
+### 🚫 When *Not* to Use It
+
+- Normal development
+- Running experiments
+- Training jobs
+
+For day-to-day usage, you should directly use:
+
+```bash
+./scripts/run_dev.sh ...
+./scripts/run_train.sh ...
+```
+
+📝 The bootstrap script is a **one-time convenience**, not part of the experiment or training workflow.
+
+
+---
+
 ## 🛠️ Development Workflow
 
 Use **`run_dev.sh`** for debugging and fast iteration:
@@ -173,6 +211,7 @@ docker pull ghcr.io/joaocb2002/object-nav-habitat-stack/habitat-project:main
 - Datasets are **not included** in Docker images
 - Must be downloaded/stored on each machine
 - Mounted via `DATA_DIR`
+
 
 ---
 
