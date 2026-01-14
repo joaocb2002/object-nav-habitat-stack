@@ -1,4 +1,4 @@
-# 🧭 ObjectNav Habitat Stack
+# 🧭 ObjectNav Habitat
 
 A reproducible **Docker-based stack** for running **Habitat-Sim / Habitat-Lab** experiments locally or on remote GPU servers.
 
@@ -12,9 +12,9 @@ A reproducible **Docker-based stack** for running **Habitat-Sim / Habitat-Lab** 
     *(Habitat-Sim, Habitat-Lab, Miniconda)*
   - **`habitat-project`**: project-specific dependencies  
     *(YOLO / Ultralytics, CV & ML libraries, etc.)*
-- 🚀 **Simple run commands**
-  - `scripts/run_dev.sh` — interactive development
-  - `scripts/run_train.sh` — long training runs
+- 🚀 **Simple commands to launch containers**
+  - `scripts/run_dev.sh` — interactive development (local machine-oriented)
+  - `scripts/run_train.sh` — long training runs (server-oriented)
 
 ---
 
@@ -34,8 +34,11 @@ A reproducible **Docker-based stack** for running **Habitat-Sim / Habitat-Lab** 
 ├── scripts/
 │   └── Container helper scripts
 ├── src/
+    └── Source code for experiments
 ├── configs/
+    └── Experiment configurations
 └── outputs/
+    └── Experiment outputs (not pushed)
 ```
 
 **Notes**
@@ -70,13 +73,13 @@ A reproducible **Docker-based stack** for running **Habitat-Sim / Habitat-Lab** 
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/joaocb2002/object-nav-habitat-stack.git
-cd object-nav-habitat-stack
+git clone https://github.com/joaocb2002/object-nav-habitat.git
+cd object-nav-habitat
 ```
 
 ### 2️⃣ Pull the project image
 ```bash
-docker pull ghcr.io/joaocb2002/object-nav-habitat-stack/habitat-project:main
+docker pull ghcr.io/joaocb2002/object-nav-habitat/habitat-project:main
 ```
 
 ### 3️⃣ Prepare datasets & outputs
@@ -90,53 +93,24 @@ If datasets live elsewhere:
 export DATA_DIR=/path/to/datasets
 ```
 
-### 4️⃣ Sanity check
+### 4️⃣ Bootstrap and Sanity check
 ```bash
-./scripts/run_dev.sh python scripts/sanity_check.py
+./scripts/bootstrap.sh # Check if infrastructure is set
+./scripts/run_dev.sh python scripts/sanity_check.py # Check if containers can import habitat
 ```
 
-### 5️⃣ Run an experiment
+### 5️⃣ Enter a container with interactive shell
 ```bash
-./scripts/run_train.sh python train.py
+./scripts/run_train.sh bash
 ```
 
----
-
-## 🚀 Bootstrap (First-Time / New Machine Setup)
-
-For convenience, the repository provides a small helper script:
-
+### 5️⃣ Enter a container with interactive shell
 ```bash
-./scripts/bootstrap.sh
+./scripts/run_train.sh bash
 ```
 
-### 🔍 What This Script Does
-
-- ✅ Checks that Docker is installed and the daemon is running  
-- 📦 Reminds you where datasets are expected to live  
-- ⬇️ Pulls the latest `habitat-project` Docker image from GHCR  
-
-### 🕒 When to Use It
-
-- After cloning the repository on a **new machine**
-- When setting up a **new server**
-- To quickly verify that **Docker is working** before running experiments
-
-### 🚫 When *Not* to Use It
-
-- Normal development
-- Running experiments
-- Training jobs
-
-For day-to-day usage, you should directly use:
-
-```bash
-./scripts/run_dev.sh ...
-./scripts/run_train.sh ...
-```
-
-📝 The bootstrap script is a **one-time convenience**, not part of the experiment or training workflow.
-
+### 6️⃣ Start developing (VS Code attachment)
+- Folder: `workspace/src`
 
 ---
 
@@ -145,11 +119,11 @@ For day-to-day usage, you should directly use:
 Use **`run_dev.sh`** for debugging and fast iteration:
 
 ```bash
-./scripts/run_dev.sh bash                  # Enter container (most common)
-./scripts/run_dev.sh python script.py      # Run a script
+./scripts/run_dev.sh bash                  # Enter container with interactive shell (most common)
+./scripts/run_dev.sh python script.py      # Run a specific script
 ```
 
-**Mount points**
+**Mount-binded points**
 - Repo → `/workspace`
 - Datasets → `/data` *(read-only)*
 - Outputs → `/outputs` *(mapped to host `./outputs`)*
@@ -164,6 +138,7 @@ Use **`run_train.sh`** for long-running jobs on servers:
 ./scripts/run_train.sh python train.py
 ```
 
+**Differences**
 - Non-interactive
 - Uses `--ipc=host` for better multiprocessing performance
 
