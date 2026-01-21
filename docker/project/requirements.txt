@@ -3,7 +3,7 @@ torch
 torchvision
 
 # YOLO
-ultralytics
+ultralytics==8.4.0
 
 # Numerics & scientific computing
 numpy<2.0
