@@ -9,13 +9,24 @@ OUTPUT_DIR="${OUTPUT_DIR:-$PWD/outputs}"
 
 mkdir -p "$OUTPUT_DIR"
 
-docker run --rm -it \
-  --gpus all \
-  -v "$(pwd):$WORKDIR" \
-  -v "$DATA_DIR:/data:ro" \
-  -v "$OUTPUT_DIR:/outputs" \
-  -w "$WORKDIR" \
-  "$IMAGE" \
-  "$@"
-
-# Note: Add 'bash' at the end of the docker run command to start an interactive shell session inside the container.
+# If no command is provided, drop into an interactive shell after installing the package.
+if [ $# -eq 0 ]; then
+  docker run --rm -it \
+    --gpus all \
+    -v "$(pwd)":$WORKDIR \
+    -v "$DATA_DIR":/data:ro \
+    -v "$OUTPUT_DIR":/outputs \
+    -w $WORKDIR \
+    $IMAGE \
+    bash -lc "pip install -e . && exec bash"
+else
+  # Run the provided command after installing the package.
+  docker run --rm -it \
+    --gpus all \
+    -v "$(pwd)":$WORKDIR \
+    -v "$DATA_DIR":/data:ro \
+    -v "$OUTPUT_DIR":/outputs \
+    -w $WORKDIR \
+    $IMAGE \
+    bash -lc "pip install -e . && exec \"\$@\"" -- "$@"
+fi

@@ -1,33 +1,29 @@
 #!/usr/bin/env bash
 set -e
 
-# ----------------------------
-# Configuration
-# ----------------------------
 IMAGE="ghcr.io/joaocb2002/object-nav-habitat/habitat-project:main"
 WORKDIR="/workspace"
 
-# This will create the directories if they do not exist
 DATA_DIR="${DATA_DIR:-$HOME/datasets}"
 OUTPUT_DIR="${OUTPUT_DIR:-$PWD/outputs}"
 
-# ----------------------------
-# Prepare host directories
-# ----------------------------
 mkdir -p "$OUTPUT_DIR"
 
-# ----------------------------
-# Run container (training)
-# ----------------------------
+if [ $# -eq 0 ]; then
+  echo "Usage: ./scripts/run_train.sh <command...>"
+  echo "Example: ./scripts/run_train.sh python train.py"
+  exit 2
+fi
+
 docker run --rm \
   --gpus all \
-  --ipc=host \ 
+  --ipc=host \
   -v "$(pwd)":$WORKDIR \
   -v "$DATA_DIR":/data:ro \
   -v "$OUTPUT_DIR":/outputs \
   -w $WORKDIR \
   $IMAGE \
-  "$@"
+  bash -lc "pip install -e . && exec \"\$@\"" -- "$@"
 
 # Differences from run_dev.sh:
     # Uses --ipc=host for shared memory
