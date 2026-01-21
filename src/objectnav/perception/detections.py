@@ -6,4 +6,6 @@ class Detection:
     cls: int
     conf: float
     xyxy: Tuple[float, float, float, float]  # x1,y1,x2,y2
-    track_id: Optional[int] = None
+    scale: float  # detection_area / image_area
+    probs: Tuple[float, ...]  # class probability vector (softmax)
+    track_id: Optional[int] = None # Optional tracking ID

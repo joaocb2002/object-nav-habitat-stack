@@ -53,13 +53,33 @@ class YOLODetector:
         xyxy = boxes.xyxy.cpu().numpy()
         conf = boxes.conf.cpu().numpy().reshape(-1)
         cls = boxes.cls.cpu().numpy().astype(int).reshape(-1)
+        probs = boxes.probs
+        prob_vectors = None
+        if probs is not None:
+            prob_vectors = probs.cpu().numpy()
+
+        image_area = float(image_bgr.shape[0] * image_bgr.shape[1])
 
         for i in range(len(cls)):
+            x1, y1, x2, y2 = (
+                float(xyxy[i, 0]),
+                float(xyxy[i, 1]),
+                float(xyxy[i, 2]),
+                float(xyxy[i, 3]),
+            )
+            det_area = max(0.0, x2 - x1) * max(0.0, y2 - y1)
+            scale = det_area / image_area if image_area > 0.0 else 0.0
+            if prob_vectors is not None:
+                det_probs = tuple(float(p) for p in prob_vectors[i].tolist())
+            else:
+                det_probs = tuple()
             dets.append(
                 Detection(
                     cls=int(cls[i]),
                     conf=float(conf[i]),
-                    xyxy=(float(xyxy[i, 0]), float(xyxy[i, 1]), float(xyxy[i, 2]), float(xyxy[i, 3])),
+                    xyxy=(x1, y1, x2, y2),
+                    probs=det_probs,
+                    scale=scale,
                 )
             )
         return dets
@@ -82,4 +102,3 @@ class YOLODetector:
         except Exception as e:
             warnings.warn(f"CUDA appears unusable with this PyTorch build; falling back to CPU. ({e})")
             return "cpu"
-

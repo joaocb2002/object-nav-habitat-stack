@@ -4,7 +4,7 @@ from objectnav.belief.legacy_bridge import likelihood_from_detection
 def main():
     # Fake detection categorical distribution for K=2 classes.
     score_vec = np.array([0.7, 0.3], dtype=np.float64)
-    bbox_scale = 5.0
+    bbox_scale = 0.7
 
     # Minimal fake calibration data with the right structure:
     # dirichlet_priors[class_name] -> list of alpha vectors, one per bin

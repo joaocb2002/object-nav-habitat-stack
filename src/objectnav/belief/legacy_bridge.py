@@ -4,6 +4,7 @@ import numpy as np
 
 # Keep legacy dependency in ONE place.
 from objectnav.legacy.mylib import probtools
+from objectnav.legacy.mylib import simtools
 
 
 def likelihood_from_detection(
@@ -28,4 +29,23 @@ def likelihood_from_detection(
         bbox_scale=bbox_scale,
         dirichlet_priors=dirichlet_priors,
         classes_bins=classes_bins,
+    )
+
+def target_probability_map(
+    belief_map,
+    occ_grid_map,
+    target_class_idx: int,
+    free_color=(255, 255, 255),
+):
+    """
+    Wrapper around legacy simtools.compute_target_prob_map.
+
+    Returns a 2D numpy array where each cell contains P(target_class | cell belief).
+    Free cells (white) are set to 0.0, matching legacy behavior.
+    """
+    return simtools.compute_target_prob_map(
+        belief_map=belief_map,
+        occ_grid_map=occ_grid_map,
+        target_class_idx=target_class_idx,
+        free_color=free_color,
     )
