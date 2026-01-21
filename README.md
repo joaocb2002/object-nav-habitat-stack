@@ -93,7 +93,12 @@ If datasets live elsewhere:
 export DATA_DIR=/path/to/datasets
 ```
 
-### 4️⃣ Bootstrap and Sanity check
+### 4️⃣ Start docker daemon (Ubuntu). Note: NOT Docker Desktop
+```bash
+sudo systemctl start docker
+```
+
+### 5️⃣ Bootstrap and Sanity check
 ```bash
 ./scripts/bootstrap.sh # Check if infrastructure is set
 ./scripts/run_dev.sh python scripts/sanity_check.py # Check if containers can import habitat
@@ -106,6 +111,37 @@ export DATA_DIR=/path/to/datasets
 
 ### 6️⃣ Start developing (VS Code attachment)
 - Folder: `workspace/src`
+
+### 7️⃣ Stop docker daemon
+```bash
+sudo systemctl stop docker
+```
+
+### Additional useful commands
+```bash
+sudo systemctl status docker # Check if docker is running
+sudo systemctl restart docker # Restart
+docker info # To see if daemon is responding
+docker images # Images info
+docker ps -a # Container info
+```
+
+---
+
+## ⚡ Quickstart (Resume Development)
+
+### 1️⃣ Enter a container with interactive shell
+```bash
+./scripts/run_train.sh bash
+```
+
+### 2️⃣ Start developing (VS Code attachment)
+- Folder: `workspace/src`
+
+### 3️⃣ Stop docker daemon
+```bash
+sudo systemctl stop docker
+```
 
 ---
 
