@@ -1,40 +1,57 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
 @dataclass(frozen=True)
 class SimConfig:
     """
-    Simulation/environment configuration constants.
+    Simulation/environment and agent configuration constants.
     Prefer overriding via a run config (YAML) rather than editing code.
     """
 
-    # --- Maps / grids ---
-    map_resolution: float = 0.05
-    grid_resolution: float = 0.25
-    cell_side: float = 0.25
+    # --- Simulation parameters ---
+    scene_dataset_config: Optional[Path] = field(default=None, metadata={"help": "Path to scene dataset config file."})
+    scene_id: Optional[str] = field(default=None, metadata={"help": "Scene ID to load."})
+    enable_physics: bool = field(default=False, metadata={"help": "Enable physics simulation."})
 
+    # --- Sensor parameters ---
+    obs_scale: float = field(default=9/16, metadata={"help": "Aspect ratio for observations (height/width)."})
+    rgb_width: int = field(default=1024, metadata={"help": "Width of RGB sensor output."})
+    rgb_height: int = field(init=False, metadata={"help": "Height of RGB sensor output, computed from obs_scale."})
+    sensor_height: float = field(default=1.5, metadata={"help": "Sensor height from ground in meters."})
+    hfov_deg: float = field(default=90.0, metadata={"help": "Horizontal field of view in degrees."})
+
+    # --- Action space magnitudes ---
+    forward_step: float = field(default=0.25, metadata={"help": "Forward step size in meters."})
+    turn_deg: float = field(default=30.0, metadata={"help": "Turn angle in degrees."})
+
+    def __post_init__(self):
+        # Set rgb_height based on obs_scale and rgb_width
+        object.__setattr__(self, 'rgb_height', int(self.rgb_width * self.obs_scale))
+
+
+@dataclass(frozen=True)
+class NavmeshConfig:
+    """
+    Navigation mesh configuration constants.
+    Prefer overriding via a run config (YAML) rather than editing code.
+    """
+    # --- Map/grid parameters ---
+    cell_height: float = field(default=0.25, metadata={"help": "Height of a grid cell in meters."})
+    cell_side: float = field(default=0.25, metadata={"help": "Side length of a grid cell in meters."})
+
+    # --- Navmesh parameters ---
+    include_static_objects: bool = field(default=True, metadata={"help": "Include static objects in navmesh generation."})
+    cell_size: float = field(default=0.05, metadata={"help": "Cell size for navmesh generation in meters."})
+    cell_height: float = field(default=0.1, metadata={"help": "Cell height for navmesh generation in meters."})
+    filter_low_hanging_obstacles: bool = field(default=True, metadata={"help": "Filter low hanging obstacles during navmesh generation."})
+    filter_ledge_spans: bool = field(default=True, metadata={"help": "Filter ledge spans during navmesh generation."})
+    filter_walkable_low_height_spans: bool = field(default=True, metadata={"help": "Filter walkable low height spans during navmesh generation."})
+   
     # --- Agent geometry ---
-    agent_height: float = 1.5
-    agent_radius: float = 0.20 
-    agent_max_climb: float = 0.2
-    agent_max_slope: float = 45.0
+    agent_height: float = field(default=1.5, metadata={"help": "Height of the agent in meters."})
+    agent_radius: float = field(default=0.20, metadata={"help": "Radius of the agent in meters."})
+    agent_max_climb: float = field(default=0.2, metadata={"help": "Maximum climbable height in meters."})
+    agent_max_slope: float = field(default=45.0, metadata={"help": "Maximum navigable slope in degrees."})
 
-    # --- Sensors ---
-    obs_scale: float = 9/16
-    rgb_width: int = 1024
-    rgb_height: int = int(1024*obs_scale)
-    sensor_height: float = 1.5
-    hfov_deg: float = 90.0
-
-    # --- Action magnitudes ---
-    forward_step: float = 0.25
-    turn_deg: float = 30.0
-
-    # --- Habitat dataset paths ---
-    scene_dataset_config: Optional[Path] = None
-    scene_id: Optional[str] = None
-
-    # --- Physics ---
-    enable_physics: bool = False

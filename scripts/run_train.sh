@@ -19,11 +19,12 @@ if [ $# -eq 0 ]; then
 fi
 
 docker run --rm \
-  -e HISTFILE=/dev/null \
   --gpus all \
   --ipc=host \
   --user "$(id -u):$(id -g)" \
   -e HOME=/workspace \
+  -e NVIDIA_DRIVER_CAPABILITIES=all \
+  -e NVIDIA_VISIBLE_DEVICES=all \
   -v /etc/passwd:/etc/passwd:ro \
   -v /etc/group:/etc/group:ro \
   -v "$(pwd)":$WORKDIR \

@@ -15,10 +15,11 @@ mkdir -p "$DATA_DIR"
 # If no command is provided, drop into an interactive shell after installing the package.
 if [ $# -eq 0 ]; then
   docker run --rm -it \
-    -e HISTFILE=/dev/null
     --gpus all \
     --user "$(id -u):$(id -g)" \
     -e HOME=/workspace \
+    -e NVIDIA_DRIVER_CAPABILITIES=all \
+    -e NVIDIA_VISIBLE_DEVICES=all \
     -v /etc/passwd:/etc/passwd:ro \
     -v /etc/group:/etc/group:ro \
     -v "$(pwd)":$WORKDIR \
@@ -30,10 +31,11 @@ if [ $# -eq 0 ]; then
 else
   # Run the provided command after installing the package.
   docker run --rm -it \
-    -e HISTFILE=/dev/null
     --gpus all \
     --user "$(id -u):$(id -g)" \
     -e HOME=/workspace \
+    -e NVIDIA_DRIVER_CAPABILITIES=all \
+    -e NVIDIA_VISIBLE_DEVICES=all \
     -v /etc/passwd:/etc/passwd:ro \
     -v /etc/group:/etc/group:ro \
     -v "$(pwd)":$WORKDIR \

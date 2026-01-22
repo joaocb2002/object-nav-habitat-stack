@@ -3,25 +3,39 @@ from pathlib import Path
 from objectnav.sim.config import SimConfig
 
 class SimulatorWrapper:
+    """A wrapper for habitat_sim.Simulator with configuration utilities."""
+
     def __init__(self, sim_config: SimConfig):
+        """Initialize the simulator with the given configuration."""
         self.cfg = self._make_cfg(sim_config)
         self.sim = habitat_sim.Simulator(self.cfg)
 
     def reset(self):
+        """Reset the simulator to the initial state."""
         self.sim.reset()
 
+    def close(self):
+        """Close the simulator and release resources."""
+        self.sim.close()
+
     def step(self, action):
+        """Take a simulation step with the given action."""
         return self.sim.step(action)
 
     @staticmethod
     def _make_cfg(sim_config: SimConfig):
+        # Simulator configuration
         sim_cfg = habitat_sim.SimulatorConfiguration()
         sim_cfg.gpu_device_id = 0
-        sim_cfg.scene_dataset_config_file = str(sim_config.scene_dataset_config) if sim_config.scene_dataset_config else ""
-        sim_cfg.scene_id = sim_config.scene_id if sim_config.scene_id else ""
+        if not sim_config.scene_dataset_config:
+            raise ValueError("sim_config.scene_dataset_config must be provided.")
+        if not sim_config.scene_id:
+            raise ValueError("sim_config.scene_id must be provided.")
+        sim_cfg.scene_dataset_config_file = str(sim_config.scene_dataset_config)
+        sim_cfg.scene_id = sim_config.scene_id
         sim_cfg.enable_physics = sim_config.enable_physics
 
-        # RGB and Depth sensors
+        # Agents sensor and action space (no geometry needed here)
         sensors = {
             "color_sensor": {
                 "sensor_type": habitat_sim.SensorType.COLOR,
@@ -34,7 +48,6 @@ class SimulatorWrapper:
                 "position": [0.0, sim_config.sensor_height, 0.0],
             },
         }
-
         sensor_specs = []
         for sensor_uuid, params in sensors.items():
             spec = habitat_sim.CameraSensorSpec()
