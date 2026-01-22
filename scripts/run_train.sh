@@ -19,6 +19,7 @@ if [ $# -eq 0 ]; then
 fi
 
 docker run --rm \
+  -e HISTFILE=/dev/null \
   --gpus all \
   --ipc=host \
   --user "$(id -u):$(id -g)" \

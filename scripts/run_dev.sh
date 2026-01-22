@@ -15,6 +15,7 @@ mkdir -p "$DATA_DIR"
 # If no command is provided, drop into an interactive shell after installing the package.
 if [ $# -eq 0 ]; then
   docker run --rm -it \
+    -e HISTFILE=/dev/null
     --gpus all \
     --user "$(id -u):$(id -g)" \
     -e HOME=/workspace \
@@ -29,6 +30,7 @@ if [ $# -eq 0 ]; then
 else
   # Run the provided command after installing the package.
   docker run --rm -it \
+    -e HISTFILE=/dev/null
     --gpus all \
     --user "$(id -u):$(id -g)" \
     -e HOME=/workspace \
