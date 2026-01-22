@@ -4,9 +4,12 @@ set -e
 IMAGE="ghcr.io/joaocb2002/object-nav-habitat/habitat-project:main"
 WORKDIR="/workspace"
 
-DATA_DIR="${DATA_DIR:-$HOME/datasets}"
+# Set up data and output directories in the current working directory by default.
+DATA_DIR="${DATA_DIR:-$PWD/datasets}"
 OUTPUT_DIR="${OUTPUT_DIR:-$PWD/outputs}"
 
+# Create data and output directories if they don't exist. If they already exist, do nothing.
+mkdir -p "$DATA_DIR"
 mkdir -p "$OUTPUT_DIR"
 
 if [ $# -eq 0 ]; then
