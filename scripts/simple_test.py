@@ -8,9 +8,10 @@ def main():
 
     # Reset simulator
     print("Resetting simulator...")
-    simulator.reset()
+    simulator.reset() 
 
     # Close simulator
+    print("Closing simulator...")
     simulator.close()
 
 
