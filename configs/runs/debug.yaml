@@ -1,0 +1,7 @@
+# Run preset: quick debug-friendly settings
+# Keep this for local development overrides.
+
+defaults:
+  - _self_
+
+seed: 123

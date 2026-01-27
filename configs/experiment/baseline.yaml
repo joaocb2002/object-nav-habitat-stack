@@ -1,0 +1,10 @@
+# Experiment preset: baseline
+# Selects variants from config groups.
+
+defaults:
+  - override /sim: floorplan1_physics
+  - override /navmesh: default
+  - override /grid_map: default
+  - _self_
+
+run_name: baseline

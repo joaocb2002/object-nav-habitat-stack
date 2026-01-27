@@ -1,0 +1,6 @@
+# Defaults for objectnav.sim.GridMapConfig
+# NOTE: meters_per_pixel is computed in code and is intentionally omitted.
+
+map_resolution: 1024
+height: 0.0
+draw_border: true

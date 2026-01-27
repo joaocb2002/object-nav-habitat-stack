@@ -1,0 +1,13 @@
+# Hydra root config (composition)
+# Compose defaults from config groups.
+# CLI overrides take highest precedence.
+
+defaults:
+  - sim: default
+  - navmesh: default
+  - grid_map: default
+  - _self_
+
+# Optional run metadata
+run_name: default
+seed: 123

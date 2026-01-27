@@ -1,0 +1,6 @@
+# Variant: AI2-THOR FloorPlan1 with physics enabled.
+# Overrides only fields that differ from sim/default.yaml.
+
+scene_dataset_config: datasets/ai2thor-hab/ai2thor-hab/ai2thor-hab.scene_dataset_config.json
+scene_id: FloorPlan1_physics
+enable_physics: true
