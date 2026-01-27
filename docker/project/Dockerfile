@@ -1,5 +1,5 @@
-# 1) Start from your already-built base image
-FROM ghcr.io/joaocb2002/object-nav-habitat/habitat-base:main
+# 1) Start from your already-built base image (see ../habitat-base/Dockerfile)
+FROM ghcr.io/joaocb2002/object-nav-habitat/habitat-base:main 
 
 # 2) Copy project requirements
 COPY requirements.txt /tmp/requirements.txt
@@ -14,4 +14,4 @@ RUN pip install torch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 \
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 # 4) Set working directory
-WORKDIR /workspace
+WORKDIR /workspace 
